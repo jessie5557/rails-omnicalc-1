@@ -27,7 +27,7 @@ class CalcController < ApplicationController
 
   def payment_results
     
-    @the_apr = params.fetch("user_apr").to_f / 100 / 12
+    @the_apr = params.fetch("user_apr").to_f
       @show_the_apr = @the_apr.to_fs(:percentage, {:precision => 4})
 
     @the_num_yrs = params.fetch("user_num_yrs").to_i
@@ -36,10 +36,11 @@ class CalcController < ApplicationController
     @principle = params.fetch("user_pri").to_f
       @show_principle = @principle.to_fs(:currency)
 
+    @r = @the_apr/100/12
     @n = @the_num_yrs/12
 
-    @numerator = @the_apr * @principle
-    @denominator = 1 - (1 + @the_apr) ** (-@the_num_mos)
+    @numerator = @r * @principle
+    @denominator = 1 - (1 + @r) ** (-@the_num_mos)
 
     @monthly_payment = @numerator/@denominator
       @formatted_monthly_payment = @monthly_payment.to_fs(:currency)
